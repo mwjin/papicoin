@@ -1,13 +1,19 @@
 package main
 
 import (
-	"github.com/mwjjeong/papicoin/blockchain"
+	"fmt"
+	"log"
+	"net/http"
 )
 
+const port string = ":4000"
+
+func home(rw http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(rw, "Hello from home!")
+}
+
 func main() {
-	chain := blockchain.GetBlockchain()
-	chain.AddBlock("Second Block")
-	chain.AddBlock("Third Block")
-	chain.AddBlock("Fourth Block")
-	chain.ListBlocks()
+	http.HandleFunc("/", home)
+	fmt.Printf("Listerning on http://localost%s\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
