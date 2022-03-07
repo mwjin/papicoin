@@ -6,30 +6,34 @@ import (
 	"sync"
 )
 
-type block struct {
+type Block struct {
 	data     string
 	hash     string
 	prevHash string
 }
 
-func (b *block) calculateHash() {
+func (b *Block) calculateHash() {
 	b.hash = fmt.Sprintf("%x", sha256.Sum256([]byte(b.data+b.prevHash)))
 }
 
 type blockchain struct {
-	blocks []*block
+	blocks []*Block
 }
 
 func (b *blockchain) AddBlock(data string) {
 	b.blocks = append(b.blocks, createBlock(data))
 }
 
-func (b *blockchain) ListBlocks() {
+func (b *blockchain) PrintBlocks() {
 	for _, blk := range b.blocks {
 		fmt.Printf("Data: %s\n", blk.data)
 		fmt.Printf("Hash: %s\n", blk.hash)
 		fmt.Printf("Prev. Hash: %s\n", blk.prevHash)
 	}
+}
+
+func (b *blockchain) GetAllBlocks() []*Block {
+	return b.blocks
 }
 
 var b *blockchain
@@ -44,8 +48,8 @@ func getLastHash() string {
 	return b.blocks[totalBlocks-1].hash
 }
 
-func createBlock(data string) *block {
-	newBlock := &block{data, "", getLastHash()}
+func createBlock(data string) *Block {
+	newBlock := &Block{data, "", getLastHash()}
 	newBlock.calculateHash()
 	return newBlock
 }
