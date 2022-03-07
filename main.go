@@ -5,17 +5,20 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/mwjjeong/papicoin/blockchain"
 )
 
 const port string = ":4000"
 
 type PageData struct {
 	PageTitle string
+	Blocks    []*blockchain.Block
 }
 
 func home(rw http.ResponseWriter, r *http.Request) {
 	tmp, err := template.ParseFiles("templates/home.html")
-	page := PageData{"Home"}
+	page := PageData{"Home", blockchain.GetBlockchain().GetAllBlocks()}
 	if err != nil {
 		log.Fatal(err)
 	}
