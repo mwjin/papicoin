@@ -7,13 +7,13 @@ import (
 )
 
 type Block struct {
-	data     string
-	hash     string
-	prevHash string
+	Data     string
+	Hash     string
+	PrevHash string
 }
 
 func (b *Block) calculateHash() {
-	b.hash = fmt.Sprintf("%x", sha256.Sum256([]byte(b.data+b.prevHash)))
+	b.Hash = fmt.Sprintf("%x", sha256.Sum256([]byte(b.Data+b.PrevHash)))
 }
 
 type blockchain struct {
@@ -26,9 +26,9 @@ func (b *blockchain) AddBlock(data string) {
 
 func (b *blockchain) PrintBlocks() {
 	for _, blk := range b.blocks {
-		fmt.Printf("Data: %s\n", blk.data)
-		fmt.Printf("Hash: %s\n", blk.hash)
-		fmt.Printf("Prev. Hash: %s\n", blk.prevHash)
+		fmt.Printf("Data: %s\n", blk.Data)
+		fmt.Printf("Hash: %s\n", blk.Hash)
+		fmt.Printf("Prev. Hash: %s\n", blk.PrevHash)
 	}
 }
 
@@ -45,7 +45,7 @@ func getLastHash() string {
 	if totalBlocks == 0 {
 		return ""
 	}
-	return b.blocks[totalBlocks-1].hash
+	return b.blocks[totalBlocks-1].Hash
 }
 
 func createBlock(data string) *Block {
