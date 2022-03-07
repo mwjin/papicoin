@@ -23,7 +23,9 @@
       <ul>
         <li>{{.Data}}</li>
         <li>{{.Hash}}</li>
-        <li>{{.PrevHash}}</li>
+        {{if .PrevHash}}
+          <li>{{.PrevHash}}</li>
+        {{end}}
       </ul>
     </section>
     {{end}}
