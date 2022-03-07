@@ -17,7 +17,7 @@ type PageData struct {
 }
 
 func home(rw http.ResponseWriter, r *http.Request) {
-	tmp := template.Must(template.ParseFiles("templates/home.html"))
+	tmp := template.Must(template.ParseFiles("templates/home.gohtml"))
 	page := PageData{"Home", blockchain.GetBlockchain().GetAllBlocks()}
 	tmp.Execute(rw, page)
 }
