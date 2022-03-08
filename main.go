@@ -7,12 +7,16 @@ import (
 	"net/http"
 )
 
-const port string = ":4000"
+const (
+	protocol string = "http://"
+	domain   string = "localhost"
+	port     string = ":4000"
+)
 
 type URL string
 
 func (u URL) MarshalText() ([]byte, error) {
-	return []byte(fmt.Sprintf("http://localhost%s%s", port, u)), nil
+	return []byte(fmt.Sprintf("%s%s%s%s", protocol, domain, port, u)), nil
 }
 
 type URLDescription struct {
@@ -42,7 +46,7 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/", documentation)
-	addr := fmt.Sprintf("http://localhost%s", port)
+	addr := fmt.Sprintf("%s%s%s", protocol, domain, port)
 	fmt.Printf("Listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
