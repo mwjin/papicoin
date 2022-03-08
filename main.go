@@ -23,6 +23,12 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 			Method:      "GET",
 			Description: "See Documentation",
 		},
+		{
+			URL:         "/blocks",
+			Method:      "POST",
+			Description: "Add a Block",
+			Payload:     "data:string",
+		},
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(data)
