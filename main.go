@@ -13,6 +13,7 @@ type URLDescription struct {
 	URL         string `json:"url"`
 	Method      string `json:"method"`
 	Description string `json:"description"`
+	Payload     string `json:"payload,omitempty"`
 }
 
 func documentation(rw http.ResponseWriter, r *http.Request) {
