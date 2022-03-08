@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/mwjjeong/papicoin/utils"
 )
 
 const port string = ":4000"
@@ -24,9 +26,7 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 		},
 	}
 	b, err := json.Marshal(data)
-	if err != nil {
-		log.Panic(err)
-	}
+	utils.HandleErr(err)
 	fmt.Fprintf(rw, "%s", b)
 }
 
