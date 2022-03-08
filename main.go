@@ -18,9 +18,9 @@ type URLDescription struct {
 func documentation(rw http.ResponseWriter, r *http.Request) {
 	data := []URLDescription{
 		{
-			"/",
-			"GET",
-			"See Documentation",
+			URL:         "/",
+			Method:      "GET",
+			Description: "See Documentation",
 		},
 	}
 	rw.Header().Add("Content-Type", "application/json")
