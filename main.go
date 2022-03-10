@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/mwjjeong/papicoin/blockchain"
+	"github.com/mwjjeong/papicoin/utils"
 )
 
 const (
@@ -46,12 +47,20 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(rw).Encode(data)
 }
 
+type BlocksPostReqBody struct {
+	Message string
+}
+
 func blocks(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		rw.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().GetAllBlocks())
-
+	case "POST":
+		var reqBody BlocksPostReqBody
+		utils.HandleErr(json.NewDecoder(r.Body).Decode(&reqBody))
+		blockchain.GetBlockchain().AddBlock(reqBody.Message)
+		rw.WriteHeader(http.StatusCreated)
 	}
 }
 func main() {
