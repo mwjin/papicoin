@@ -13,8 +13,9 @@ import (
 const (
 	protocol string = "http://"
 	domain   string = "localhost"
-	port     string = ":4000"
 )
+
+var port string
 
 type url string
 
@@ -68,10 +69,16 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusCreated)
 	}
 }
-func Start() {
-	http.HandleFunc("/", documentation)
-	http.HandleFunc("/blocks", blocks)
+
+func Start(aPort int) {
+	registerHandlerFunc()
+	port = fmt.Sprintf(":%d", aPort)
 	addr := fmt.Sprintf("%s%s%s", protocol, domain, port)
 	fmt.Printf("Listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(port, nil))
+}
+
+func registerHandlerFunc() {
+	http.HandleFunc("/", documentation)
+	http.HandleFunc("/blocks", blocks)
 }
