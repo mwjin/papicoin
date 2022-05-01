@@ -51,7 +51,7 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 			Payload:     "data:string",
 		},
 		{
-			URL:         url("/blocks/{id}"),
+			URL:         url("/blocks/{height}"),
 			Method:      "GET",
 			Description: "See A Block",
 		},
@@ -80,10 +80,10 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 func block(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		blockId, err := strconv.Atoi(mux.Vars(r)["id"])
+		height, err := strconv.Atoi(mux.Vars(r)["height"])
 		utils.HandleErr(err)
 		rw.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().GetBlock(blockId))
+		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().GetBlock(height))
 	}
 }
 
@@ -100,6 +100,6 @@ func createHandler() http.Handler {
 	handler := mux.NewRouter()
 	handler.HandleFunc("/", documentation).Methods("GET")
 	handler.HandleFunc("/blocks", blocks).Methods("GET", "POST")
-	handler.HandleFunc("/blocks/{id:[0-9]+}", block).Methods("GET")
+	handler.HandleFunc("/blocks/{height:[0-9]+}", block).Methods("GET")
 	return handler
 }
