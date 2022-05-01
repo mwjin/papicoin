@@ -98,8 +98,8 @@ func Start(aPort int) {
 
 func createHandler() http.Handler {
 	handler := mux.NewRouter()
-	handler.HandleFunc("/", documentation)
-	handler.HandleFunc("/blocks", blocks)
-	handler.HandleFunc("/blocks/{id:[0-9]+}", block)
+	handler.HandleFunc("/", documentation).Methods("GET")
+	handler.HandleFunc("/blocks", blocks).Methods("GET", "POST")
+	handler.HandleFunc("/blocks/{id:[0-9]+}", block).Methods("GET")
 	return handler
 }
