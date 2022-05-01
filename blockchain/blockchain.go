@@ -37,8 +37,8 @@ func (b *blockchain) GetAllBlocks() []*Block {
 	return b.blocks
 }
 
-func (b *blockchain) GetBlock(id int) *Block {
-	return b.blocks[id]
+func (b *blockchain) GetBlock(height int) *Block {
+	return b.blocks[height-1]
 }
 
 var b *blockchain
