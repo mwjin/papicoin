@@ -1,21 +1,9 @@
 package blockchain
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"sync"
 )
-
-type Block struct {
-	Data     string `json:"data"`
-	Hash     string `json:"hash"`
-	PrevHash string `json:"prevHash,omitempty"`
-	Height   int    `json:"height"`
-}
-
-func (b *Block) calculateHash() {
-	b.Hash = fmt.Sprintf("%x", sha256.Sum256([]byte(b.Data+b.PrevHash)))
-}
 
 type blockchain struct {
 	blocks []*Block
@@ -60,12 +48,6 @@ func getCurrentHeight() int {
 		return 0
 	}
 	return b.blocks[totalBlocks-1].Height
-}
-
-func createBlock(data string) *Block {
-	newBlock := &Block{data, "", getLastHash(), getCurrentHeight() + 1}
-	newBlock.calculateHash()
-	return newBlock
 }
 
 func GetBlockchain() *blockchain {
