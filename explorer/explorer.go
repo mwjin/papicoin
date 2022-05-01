@@ -41,10 +41,10 @@ func add(rw http.ResponseWriter, r *http.Request) {
 }
 
 func Start(port int) {
+	fmt.Printf("Listening on http://localhost:%d\n", port)
 	parseTemplate()
-	registerHandlerFunc()
-	fmt.Printf("Listerning on http://localhost:%d\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+	handler := createHandler()
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), handler))
 }
 
 func parseTemplate() {
@@ -52,7 +52,9 @@ func parseTemplate() {
 	templates = template.Must(templates.ParseGlob(templateDir + "partials/*.gohtml"))
 }
 
-func registerHandlerFunc() {
-	http.HandleFunc("/", home)
-	http.HandleFunc("/add", add)
+func createHandler() http.Handler {
+	handler := http.NewServeMux()
+	handler.HandleFunc("/", home)
+	handler.HandleFunc("/add", add)
+	return handler
 }

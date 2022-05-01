@@ -71,14 +71,17 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 }
 
 func Start(aPort int) {
-	registerHandlerFunc()
 	port = fmt.Sprintf(":%d", aPort)
 	addr := fmt.Sprintf("%s%s%s", protocol, domain, port)
 	fmt.Printf("Listening on %s\n", addr)
-	log.Fatal(http.ListenAndServe(port, nil))
+
+	handler := createHandler()
+	log.Fatal(http.ListenAndServe(port, handler))
 }
 
-func registerHandlerFunc() {
-	http.HandleFunc("/", documentation)
-	http.HandleFunc("/blocks", blocks)
+func createHandler() http.Handler {
+	handler := http.NewServeMux()
+	handler.HandleFunc("/", documentation)
+	handler.HandleFunc("/blocks", blocks)
+	return handler
 }
