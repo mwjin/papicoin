@@ -25,8 +25,11 @@ func (b *blockchain) GetAllBlocks() []*Block {
 	return b.blocks
 }
 
-func (b *blockchain) GetBlock(height int) *Block {
-	return b.blocks[height-1]
+func (b *blockchain) GetBlock(height int) (*Block, error) {
+	if height > len(b.blocks) {
+		return nil, fmt.Errorf("no block with height %d", height)
+	}
+	return b.blocks[height-1], nil
 }
 
 var b *blockchain

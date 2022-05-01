@@ -64,6 +64,10 @@ type blocksPostReqBody struct {
 	Message string
 }
 
+type errorResponse struct {
+	ErrorMessage string `json:"errorMessage"`
+}
+
 func blocks(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -82,8 +86,13 @@ func block(rw http.ResponseWriter, r *http.Request) {
 	case "GET":
 		height, err := strconv.Atoi(mux.Vars(r)["height"])
 		utils.HandleErr(err)
+		block, err := blockchain.GetBlockchain().GetBlock(height)
 		rw.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().GetBlock(height))
+		if err != nil {
+			json.NewEncoder(rw).Encode(errorResponse{fmt.Sprint(err)})
+		} else {
+			json.NewEncoder(rw).Encode(block)
+		}
 	}
 }
 
