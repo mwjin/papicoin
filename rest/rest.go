@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/mwjjeong/papicoin/blockchain"
 	"github.com/mwjjeong/papicoin/utils"
 )
@@ -48,6 +50,11 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 			Description: "Add a Block",
 			Payload:     "data:string",
 		},
+		{
+			URL:         url("/blocks/{id}"),
+			Method:      "GET",
+			Description: "See A Block",
+		},
 	}
 	rw.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(rw).Encode(data)
@@ -70,6 +77,16 @@ func blocks(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func block(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		blockId, err := strconv.Atoi(mux.Vars(r)["id"])
+		utils.HandleErr(err)
+		rw.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(rw).Encode(blockchain.GetBlockchain().GetBlock(blockId))
+	}
+}
+
 func Start(aPort int) {
 	port = fmt.Sprintf(":%d", aPort)
 	addr := fmt.Sprintf("%s%s%s", protocol, domain, port)
@@ -80,8 +97,9 @@ func Start(aPort int) {
 }
 
 func createHandler() http.Handler {
-	handler := http.NewServeMux()
+	handler := mux.NewRouter()
 	handler.HandleFunc("/", documentation)
 	handler.HandleFunc("/blocks", blocks)
+	handler.HandleFunc("/blocks/{id:[0-9]+}", block)
 	return handler
 }

@@ -36,6 +36,10 @@ func (b *blockchain) GetAllBlocks() []*Block {
 	return b.blocks
 }
 
+func (b *blockchain) GetBlock(id int) *Block {
+	return b.blocks[id]
+}
+
 var b *blockchain
 var once sync.Once
 
