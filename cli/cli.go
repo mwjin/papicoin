@@ -31,16 +31,23 @@ func printUsage() {
 func run(mode string, port1 int, port2 int) {
 	switch mode {
 	case "explorer":
-		fmt.Printf("Run Papicoin Explorer on %d\n\n", port1)
-		explorer.Start(port1)
+		runExplorer(port1)
 	case "rest":
-		fmt.Printf("Run Papicoin REST API server on %d\n\n", port1)
-		rest.Start(port1)
+		runRestApi(port2)
 	case "both":
-		fmt.Printf("Run Papicoin Explorer(%d) and REST API(%d)\n\n", port1, port2)
-		go explorer.Start(port1)
-		rest.Start(port2)
+		go runRestApi(port1)
+		runExplorer(port2)
 	default:
 		printUsage()
 	}
+}
+
+func runExplorer(port int) {
+	fmt.Printf("Run Papicoin Explorer on %d\n\n", port)
+	explorer.Start(port)
+}
+
+func runRestApi(port int) {
+	fmt.Printf("Run Papicoin REST API server on %d\n\n", port)
+	rest.Start(port)
 }
